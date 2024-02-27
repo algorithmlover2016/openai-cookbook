@@ -1,6 +1,12 @@
 import os
+import logging
 import dotenv
 dotenv.load_dotenv() # load environment variables from .env file
+logging.basicConfig(
+    level=logging.INFO,
+    format='[%(asctime)s %(levelname)s %(process)d %(pathname)s:%(lineno)d %(message)s]',
+    datefmt='%Y-%m-%d %H:%M:%S'
+)
 
 # Azure OpenAI
 api_key = os.getenv("OPENAI_API_KEY_GPT4", "<your OpenAI API key if not set as env var>")
