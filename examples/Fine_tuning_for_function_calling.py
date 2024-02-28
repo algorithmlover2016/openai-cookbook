@@ -17,7 +17,7 @@ GPT_MODEL = GPT_MODEL
 EMBEDDING_MODEL = azure_embedding_model
 # client = OpenAI()
 client = AzureOpenAI(
-    api_key = azure_api_key, 
+    api_key = azure_api_key,
     api_version = azure_api_version,
     azure_endpoint = azure_endpoint
 )
@@ -92,7 +92,7 @@ def get_chat_completion(
 
         error_msg = f"{exception_type}: {exception_message}\r\nTraceback:\r\n{traceback_info}"
         logging.error(error_msg)
-        return e 
+        return e
 
 
 DRONE_SYSTEM_PROMPT = """You are an intelligent AI that controls a drone. Given a command or request from the user,
@@ -384,7 +384,7 @@ straightforward_prompts = ['Land the drone at the home base',
   'turn into an elephant!']
 
 import pdb
-pdb.set_trace()
+# pdb.set_trace()
 
 for prompt in straightforward_prompts:
     messages = []
@@ -411,3 +411,168 @@ for prompt in challenging_prompts:
       logging.info(completion.tool_calls[0].function)
     except:
       logging.info(completion.tool_calls[0].content)
+
+placeholder_int = 'fill_in_int'
+placeholder_string = 'fill_in_string'
+
+def generate_permutations(params: Dict[str, Dict[str, Any]]) -> Generator[Dict[str, Any], None, None]:
+    """
+    Generates all possible permutations for given parameters.
+
+    :param params: Parameter dictionary containing required and optional fields.
+    :return: A generator yielding each permutation.
+    """
+
+    # Extract the required fields from the parameters
+    required_fields = params.get('required', [])
+
+    # Generate permutations for required fields
+    required_permutations = generate_required_permutations(params, required_fields)
+
+    # Generate optional permutations based on each required permutation
+    for required_perm in required_permutations:
+        yield from generate_optional_permutations(params, required_perm)
+
+
+def generate_required_permutations(params: Dict[str, Dict[str, Any]], required_fields: List[str]) -> List[Dict[str, Any]]:
+    """
+    Generates permutations for the required fields.
+
+    :param params: Parameter dictionary.
+    :param required_fields: List of required fields.
+    :return: A list of permutations for required fields.
+    """
+
+    # Get all possible values for each required field
+    required_values = [get_possible_values(params, field) for field in required_fields]
+
+    # Generate permutations from possible values
+    return [dict(zip(required_fields, values)) for values in itertools.product(*required_values)]
+
+
+def generate_optional_permutations(params: Dict[str, Dict[str, Any]], base_perm: Dict[str, Any]) -> Generator[Dict[str, Any], None, None]:
+    """
+    Generates permutations for optional fields based on a base permutation.
+
+    :param params: Parameter dictionary.
+    :param base_perm: Base permutation dictionary.
+    :return: A generator yielding each permutation for optional fields.
+    """
+
+    # Determine the fields that are optional by subtracting the base permutation's fields from all properties
+    optional_fields = set(params['properties']) - set(base_perm)
+
+    # Iterate through all combinations of optional fields
+    for field_subset in itertools.chain.from_iterable(itertools.combinations(optional_fields, r) for r in range(len(optional_fields) + 1)):
+
+        # Generate product of possible values for the current subset of fields
+        for values in itertools.product(*(get_possible_values(params, field) for field in field_subset)):
+
+            # Create a new permutation by combining base permutation and current field values
+            new_perm = {**base_perm, **dict(zip(field_subset, values))}
+
+            yield new_perm
+
+
+def get_possible_values(params: Dict[str, Dict[str, Any]], field: str) -> List[Any]:
+    """
+    Retrieves possible values for a given field.
+
+    :param params: Parameter dictionary.
+    :param field: The field for which to get possible values.
+    :return: A list of possible values.
+    """
+
+    # Extract field information from the parameters
+    field_info = params['properties'][field]
+
+    # Based on the field's type or presence of 'enum', determine and return the possible values
+    if 'enum' in field_info:
+        return field_info['enum']
+    elif field_info['type'] == 'integer':
+        return [placeholder_int]
+    elif field_info['type'] == 'string':
+        return [placeholder_string]
+    elif field_info['type'] == 'boolean':
+        return [True, False]
+    elif field_info['type'] == 'array' and 'enum' in field_info['items']:
+        enum_values = field_info['items']['enum']
+        all_combinations = [list(combo) for i in range(1, len(enum_values) + 1) for combo in itertools.combinations(enum_values, i)]
+        return all_combinations
+    return []
+
+INVOCATION_FILLER_PROMPT = """
+1) Input reasonable values for 'fill_in_string' and 'fill_in_int' in the invocation here: {invocation}. Reasonable values are determined by the function definition. Use the
+the entire function provided here :{function} to get context over what proper fill_in_string and fill_in_int values would be.
+Example:
+
+Input: invocation: {{
+    "name": "control_camera",
+    "arguments": {{
+      "mode":"video",
+      "duration":"fill_in_int"
+    }}
+}},
+function:{function}
+
+Output: invocation: {{
+    "name": "control_camera",
+    "arguments": {{
+      "mode":"video",
+      "duration": 30
+    }}
+}}
+
+
+MAKE SURE output is just a dictionary with keys 'name' and 'arguments', no other text or response.
+
+Input: {invocation}
+Output:
+"""
+
+
+COMMAND_GENERATION_PROMPT= """
+You are to output 2 commands, questions or statements that would generate the inputted function and parameters.
+Please make the commands or questions natural, as a person would ask, and the command or questions should be varied and not repetitive.
+It should not always mirror the exact technical terminology used in the function and parameters, rather reflect a conversational and intuitive request.
+For instance, the prompt should not be 'turn on the dome light', as that is too technical, but rather 'turn on the inside lights'.
+Another example, is the prompt should not be 'turn on the HVAC', but rather 'turn on the air conditioning'. Use language a normal driver would use, even if
+it is technically incorrect but colloquially used.
+
+RULES: ALWAYS put a backwards slash before an apostrophe or single quote '. For example, do not say don't but say don\'t.
+Prompts MUST be in double quotes as well.
+
+Example
+
+Input: {{'name': 'calibrate_sensors','arguments': {{}}'' }}
+Prompt: ["The sensors are out of whack, can you reset them", "The calibration of the drone is off, fix it please!"]
+
+Input: {{'name': 'set_autopilot','arguments': {{'status': 'off'}}}}
+Prompt: ["OK, I want to take back pilot control now","Turn off the automatic pilot I'm ready control it"]
+
+Input: {invocation}
+Prompt:
+"""
+
+
+input_objects = []
+all_but_reject = [f for f in function_list if f.get('name') != 'reject_request']
+
+for function in all_but_reject:
+    func_name = function['function']['name']
+    params = function['function']['parameters']
+    for arguments in generate_permutations(params):
+      if any(val in arguments.values() for val in ['fill_in_int', 'fill_in_str']):
+          input_object = {
+              "name": func_name,
+              "arguments": arguments
+          }
+          messages = [{"role": "user", "content": INVOCATION_FILLER_PROMPT.format(invocation=input_object,function=function)}]
+          input_object = get_chat_completion(model=GPT_MODEL, messages=messages, max_tokens = 200, temperature=.1).content
+      else:
+          input_object = {
+              "name": func_name,
+              "arguments": arguments
+          }
+
+      input_objects.append(input_object)
