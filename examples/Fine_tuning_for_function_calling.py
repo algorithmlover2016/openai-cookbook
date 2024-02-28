@@ -384,7 +384,6 @@ straightforward_prompts = ['Land the drone at the home base',
   'turn into an elephant!']
 
 import pdb
-# pdb.set_trace()
 
 for prompt in straightforward_prompts:
     messages = []
@@ -554,6 +553,7 @@ Input: {invocation}
 Prompt:
 """
 
+pdb.set_trace()
 
 input_objects = []
 all_but_reject = [f for f in function_list if f.get('name') != 'reject_request']
