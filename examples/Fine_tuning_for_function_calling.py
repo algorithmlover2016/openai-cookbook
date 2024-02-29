@@ -80,6 +80,9 @@ def get_chat_completion(
         'tool_choice': tool_choice,
         'top_p': top_p
     }
+    if not tools:
+        params.pop("tools")
+        params.pop("tool_choice")
 
     try:
         completion = client.chat.completions.create(**params)
@@ -556,7 +559,7 @@ Prompt:
 pdb.set_trace()
 
 input_objects = []
-all_but_reject = [f for f in function_list if f.get('name') != 'reject_request']
+all_but_reject = [f for f in function_list if f.get("function").get('name') != 'reject_request']
 
 for function in all_but_reject:
     func_name = function['function']['name']
@@ -576,3 +579,5 @@ for function in all_but_reject:
           }
 
       input_objects.append(input_object)
+
+logging.info(input_objects)
