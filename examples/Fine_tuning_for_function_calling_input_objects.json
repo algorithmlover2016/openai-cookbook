@@ -1,0 +1,364 @@
+[
+    {
+        "name": "takeoff_drone",
+        "arguments": {
+            "altitude": 100
+        }
+    },
+    {
+        "name": "land_drone",
+        "arguments": {
+            "location": "current"
+        }
+    },
+    {
+        "name": "land_drone",
+        "arguments": {
+            "location": "home_base"
+        }
+    },
+    {
+        "name": "land_drone",
+        "arguments": {
+            "location": "custom"
+        }
+    },
+    {
+        "name": "control_drone_movement",
+        "arguments": {
+            "direction": "forward",
+            "distance": 10
+        }
+    },
+    {
+        "name": "control_drone_movement",
+        "arguments": {
+            "direction": "backward",
+            "distance": 10
+        }
+    },
+    {
+        "name": "control_drone_movement",
+        "arguments": {
+            "direction": "left",
+            "distance": 10
+        }
+    },
+    {
+        "name": "control_drone_movement",
+        "arguments": {
+            "direction": "right",
+            "distance": 10
+        }
+    },
+    {
+        "name": "control_drone_movement",
+        "arguments": {
+            "direction": "up",
+            "distance": 10
+        }
+    },
+    {
+        "name": "control_drone_movement",
+        "arguments": {
+            "direction": "down",
+            "distance": 10
+        }
+    },
+    {
+        "name": "set_drone_speed",
+        "arguments": {
+            "speed": 20
+        }
+    },
+    {
+        "name": "control_camera",
+        "arguments": {
+            "mode": "photo"
+        }
+    },
+    {
+        "name": "control_camera",
+        "arguments": {
+            "mode": "photo",
+            "duration": 0
+        }
+    },
+    {
+        "name": "control_camera",
+        "arguments": {
+            "mode": "video"
+        }
+    },
+    {
+        "name": "control_camera",
+        "arguments": {
+            "mode": "video",
+            "duration": 60
+        }
+    },
+    {
+        "name": "control_camera",
+        "arguments": {
+            "mode": "panorama"
+        }
+    },
+    {
+        "name": "control_camera",
+        "arguments": {
+            "mode": "panorama",
+            "duration": 0
+        }
+    },
+    {
+        "name": "control_gimbal",
+        "arguments": {
+            "tilt": 45,
+            "pan": 90
+        }
+    },
+    {
+        "name": "set_drone_lighting",
+        "arguments": {
+            "mode": "on"
+        }
+    },
+    {
+        "name": "set_drone_lighting",
+        "arguments": {
+            "mode": "off"
+        }
+    },
+    {
+        "name": "set_drone_lighting",
+        "arguments": {
+            "mode": "blink"
+        }
+    },
+    {
+        "name": "set_drone_lighting",
+        "arguments": {
+            "mode": "sos"
+        }
+    },
+    {
+        "name": "return_to_home",
+        "arguments": {}
+    },
+    {
+        "name": "set_battery_saver_mode",
+        "arguments": {
+            "status": "on"
+        }
+    },
+    {
+        "name": "set_battery_saver_mode",
+        "arguments": {
+            "status": "off"
+        }
+    },
+    {
+        "name": "set_obstacle_avoidance",
+        "arguments": {
+            "mode": "on"
+        }
+    },
+    {
+        "name": "set_obstacle_avoidance",
+        "arguments": {
+            "mode": "off"
+        }
+    },
+    {
+        "name": "set_follow_me_mode",
+        "arguments": {
+            "status": "on"
+        }
+    },
+    {
+        "name": "set_follow_me_mode",
+        "arguments": {
+            "status": "off"
+        }
+    },
+    {
+        "name": "calibrate_sensors",
+        "arguments": {}
+    },
+    {
+        "name": "set_autopilot",
+        "arguments": {
+            "status": "on"
+        }
+    },
+    {
+        "name": "set_autopilot",
+        "arguments": {
+            "status": "off"
+        }
+    },
+    {
+        "name": "configure_led_display",
+        "arguments": {
+            "pattern": "solid"
+        }
+    },
+    {
+        "name": "configure_led_display",
+        "arguments": {
+            "pattern": "solid",
+            "color": "red"
+        }
+    },
+    {
+        "name": "configure_led_display",
+        "arguments": {
+            "pattern": "solid",
+            "color": "blue"
+        }
+    },
+    {
+        "name": "configure_led_display",
+        "arguments": {
+            "pattern": "solid",
+            "color": "green"
+        }
+    },
+    {
+        "name": "configure_led_display",
+        "arguments": {
+            "pattern": "solid",
+            "color": "yellow"
+        }
+    },
+    {
+        "name": "configure_led_display",
+        "arguments": {
+            "pattern": "solid",
+            "color": "white"
+        }
+    },
+    {
+        "name": "configure_led_display",
+        "arguments": {
+            "pattern": "blink"
+        }
+    },
+    {
+        "name": "configure_led_display",
+        "arguments": {
+            "pattern": "blink",
+            "color": "red"
+        }
+    },
+    {
+        "name": "configure_led_display",
+        "arguments": {
+            "pattern": "blink",
+            "color": "blue"
+        }
+    },
+    {
+        "name": "configure_led_display",
+        "arguments": {
+            "pattern": "blink",
+            "color": "green"
+        }
+    },
+    {
+        "name": "configure_led_display",
+        "arguments": {
+            "pattern": "blink",
+            "color": "yellow"
+        }
+    },
+    {
+        "name": "configure_led_display",
+        "arguments": {
+            "pattern": "blink",
+            "color": "white"
+        }
+    },
+    {
+        "name": "configure_led_display",
+        "arguments": {
+            "pattern": "pulse"
+        }
+    },
+    {
+        "name": "configure_led_display",
+        "arguments": {
+            "pattern": "pulse",
+            "color": "red"
+        }
+    },
+    {
+        "name": "configure_led_display",
+        "arguments": {
+            "pattern": "pulse",
+            "color": "blue"
+        }
+    },
+    {
+        "name": "configure_led_display",
+        "arguments": {
+            "pattern": "pulse",
+            "color": "green"
+        }
+    },
+    {
+        "name": "configure_led_display",
+        "arguments": {
+            "pattern": "pulse",
+            "color": "yellow"
+        }
+    },
+    {
+        "name": "configure_led_display",
+        "arguments": {
+            "pattern": "pulse",
+            "color": "white"
+        }
+    },
+    {
+        "name": "configure_led_display",
+        "arguments": {
+            "pattern": "rainbow"
+        }
+    },
+    {
+        "name": "configure_led_display",
+        "arguments": {
+            "pattern": "rainbow",
+            "color": "red"
+        }
+    },
+    {
+        "name": "configure_led_display",
+        "arguments": {
+            "pattern": "rainbow",
+            "color": "blue"
+        }
+    },
+    {
+        "name": "configure_led_display",
+        "arguments": {
+            "pattern": "rainbow",
+            "color": "green"
+        }
+    },
+    {
+        "name": "configure_led_display",
+        "arguments": {
+            "pattern": "rainbow",
+            "color": "yellow"
+        }
+    },
+    {
+        "name": "configure_led_display",
+        "arguments": {
+            "pattern": "rainbow",
+            "color": "white"
+        }
+    }
+]
