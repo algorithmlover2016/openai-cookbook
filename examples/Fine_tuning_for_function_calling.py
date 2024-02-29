@@ -504,7 +504,7 @@ def get_possible_values(params: Dict[str, Dict[str, Any]], field: str) -> List[A
     return []
 
 INVOCATION_FILLER_PROMPT = """
-1) Input reasonable values for 'fill_in_string' and 'fill_in_int' in the invocation here: {invocation}. Reasonable values are determined by the function definition. Use the
+1) Input reasonable values for "fill_in_string" and "fill_in_int" in the invocation here: {invocation}. Reasonable values are determined by the function definition. Use the
 the entire function provided here :{function} to get context over what proper fill_in_string and fill_in_int values would be.
 Example:
 
@@ -526,7 +526,7 @@ Output: invocation: {{
 }}
 
 
-MAKE SURE output is just a dictionary with keys 'name' and 'arguments', no other text or response.
+MAKE SURE output is just a dictionary with keys "name" and "arguments", no other text or response. You should use " instead of ' to mark string.
 
 Input: {invocation}
 Output:
@@ -556,7 +556,7 @@ Input: {invocation}
 Prompt:
 """
 
-pdb.set_trace()
+# pdb.set_trace()
 
 input_objects = []
 all_but_reject = [f for f in function_list if f.get("function").get('name') != 'reject_request']
@@ -572,6 +572,8 @@ for function in all_but_reject:
           }
           messages = [{"role": "user", "content": INVOCATION_FILLER_PROMPT.format(invocation=input_object,function=function)}]
           input_object = get_chat_completion(model=GPT_MODEL, messages=messages, max_tokens = 200, temperature=.1).content
+          if isinstance(input_object, str):
+              input_object = json.loads(input_object)
       else:
           input_object = {
               "name": func_name,
@@ -580,4 +582,4 @@ for function in all_but_reject:
 
       input_objects.append(input_object)
 
-logging.info(input_objects)
+logging.info(json.dumps(input_objects))
